@@ -1,0 +1,68 @@
+package chatester.main.view;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import chatester.main.ChatesterApplicationMain;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.TilePane; 
+public class HomeController implements Initializable{
+	
+	private ChatesterApplicationMain mainApp;
+	
+	private String userName;
+	@FXML
+	private AnchorPane RecActivitiesPane;
+	@FXML
+	private TilePane RecBodyAcitivities;
+	@FXML
+	private ListView<String> friendList;
+	@FXML
+	private Label userLabel;
+	@FXML
+	private Button btnLogout;
+	@FXML
+	private Button btnExit;
+	
+	private ObservableList<String> personData = FXCollections.observableArrayList();
+ 
+	@Override
+	public void initialize(URL arg0, ResourceBundle arg1) {
+		// TODO Auto-generated method stub
+		personData.add("Hans");
+		personData.add("Ruth");
+		personData.add("Mueller");
+		personData.add("Cornelia");
+		personData.add("Meier");
+		personData.add("Lydia");
+		personData.add("Kunz");
+		
+		friendList.setItems(personData);
+		
+		btnLogout.setOnAction(eve->{logOut();});
+		btnExit.setOnAction(eve->{Exit();});
+		userLabel.setText(userName);
+	}
+
+	
+    public void setMainApp(ChatesterApplicationMain mainApp) {
+        this.mainApp = mainApp;
+    }
+    public void setUserName(String username) {
+    	this.userName=username;
+    }
+
+    public void logOut() {
+    	mainApp.showLogin();
+    }
+    public void Exit() {
+    	System.exit(0);
+    }
+
+}
