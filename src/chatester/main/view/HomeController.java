@@ -31,7 +31,9 @@ public class HomeController implements Initializable{
 	private Button btnExit;
 	
 	private ObservableList<String> personData = FXCollections.observableArrayList();
- 
+	public  HomeController(){
+		
+	}
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
@@ -47,22 +49,28 @@ public class HomeController implements Initializable{
 		
 		btnLogout.setOnAction(eve->{logOut();});
 		btnExit.setOnAction(eve->{Exit();});
-		userLabel.setText(userName);
+		
+		
 	}
+
 
 	
     public void setMainApp(ChatesterApplicationMain mainApp) {
         this.mainApp = mainApp;
+       
     }
     public void setUserName(String username) {
     	this.userName=username;
+    	 userLabel.setText("Hi, "+userName);
     }
 
     public void logOut() {
+    	mainApp.setUserLogin("", "");
     	mainApp.showLogin();
     }
     public void Exit() {
     	System.exit(0);
+    	
     }
 
 }
