@@ -3,13 +3,16 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import chatester.main.ChatesterApplicationMain;
+import chatester.main.services.UserService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.TilePane; 
 public class HomeController implements Initializable{
@@ -29,7 +32,7 @@ public class HomeController implements Initializable{
 	private Button btnLogout;
 	@FXML
 	private Button btnExit;
-	
+
 	private ObservableList<String> personData = FXCollections.observableArrayList();
 	public  HomeController(){
 		
@@ -57,11 +60,12 @@ public class HomeController implements Initializable{
 	
     public void setMainApp(ChatesterApplicationMain mainApp) {
         this.mainApp = mainApp;
-       
+        
     }
     public void setUserName(String username) {
     	this.userName=username;
-    	 userLabel.setText("Hi, "+userName);
+    	userLabel.setText("Hi, "+userName);
+    	 mainApp.showWaitingBar("Hide");
     }
 
     public void logOut() {

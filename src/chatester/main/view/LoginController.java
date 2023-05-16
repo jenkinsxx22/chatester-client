@@ -4,6 +4,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import chatester.main.ChatesterApplicationMain;
+import chatester.main.models.User;
+import chatester.main.services.UserService;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -29,7 +31,7 @@ public class LoginController implements Initializable{
 	@FXML
 	private Button btnRegister;
 	
-	
+	private UserService userservice = new UserService();
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
@@ -37,14 +39,33 @@ public class LoginController implements Initializable{
 		btnLogin.setOnAction(eve->{Login();});
 		btnExit.setOnAction(eve->{Exit();});
 		btnRegister.setOnAction(eve->{Register();});
+		userservice.Connect();
 	}
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
     }
 	public void Login() {
 		if(txtUserName.getText()!="" && pswUserPassword.getText()!="") {
-		mainApp.showHome();
-		mainApp.setUserLogin(txtUserName.getText(), pswUserPassword.getText());
+
+		
+			User user = new User();
+			user=userservice.findUserByEmail(txtUserName.getText());
+			if(user!=null) {
+			if(user.getPassword().equals(pswUserPassword.getText()))
+			{
+				mainApp.setUser(user);
+				mainApp.showHome();
+				mainApp.setUserLogin(txtUserName.getText(), pswUserPassword.getText());
+			}
+			else {
+				showLoginError();
+	            
+	        }
+			}
+				else {
+					showLoginError();
+		            
+		        }
 		}
 		else {
             // Show the error message.
@@ -57,6 +78,15 @@ public class LoginController implements Initializable{
             
         }
 	}
+	public void showLoginError() {
+        // Show the error message.
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.initOwner(dialogStage);
+        alert.setTitle("Invalid Username or Password");
+        alert.setHeaderText("Invalid Username or Password");
+        alert.setContentText("entered details are not correct!");            
+        alert.showAndWait();
+	}
 	public void Exit() {
 		System.exit(0);
 	}
@@ -67,5 +97,7 @@ public class LoginController implements Initializable{
 	}
     public void setMainApp(ChatesterApplicationMain mainApp) {
         this.mainApp = mainApp;
+   	 mainApp.showWaitingBar("Hide");
+
     }
 }

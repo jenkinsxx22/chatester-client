@@ -5,6 +5,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import chatester.main.ChatesterApplicationMain;
+import chatester.main.models.User;
+import chatester.main.services.UserService;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -31,12 +33,14 @@ public class RegisterController implements Initializable{
 	@FXML
 	private Button btnRegister;
 	
+	private UserService userservice = new UserService();
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
 		btnRegister.setOnAction(eve->{Register();});
 		btnCancel.setOnAction(eve->{Cancel();});
+		userservice.Connect();
 	}
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
@@ -59,6 +63,14 @@ public class RegisterController implements Initializable{
 	            alert.showAndWait();	
 			}
 			if(strPassword1.equals(strPassword2)) {
+				
+				User user = new User();
+				
+				user.setFullName(txtFullName.getText());
+				user.setEmail(txtEmail.getText());
+				user.setPassword(strPassword1);
+				userservice.SaveUser(user);
+				
 				System.out.print("Registered!");
 				mainApp.setUserLogin(txtEmail.getText(), strPassword1);
 				mainApp.showHome();
@@ -92,6 +104,8 @@ public class RegisterController implements Initializable{
 	
     public void setMainApp(ChatesterApplicationMain mainApp) {
         this.mainApp = mainApp;
+   	 mainApp.showWaitingBar("Hide");
+
     }
 
 
