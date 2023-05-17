@@ -18,7 +18,12 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.FindOneAndUpdateOptions;
+import com.mongodb.client.model.ReturnDocument;
+import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.InsertOneResult;
+
+import chatester.main.MainMongoTest.Recipe;
 import chatester.main.models.User;
 
 public class UserService {
@@ -90,4 +95,22 @@ public class UserService {
 		return firstUser;
 	}
  
+	public void uploadProfilePic(User user) {
+		User firstUser = new User();
+		MongoDatabase database = mongoClient.getDatabase(dbName);		
+		MongoCollection<User> collection = database.getCollection(collectionName, User.class);
+		Bson updateFilter = Updates.set("profilepic",user.getProfilepic() );
+		Bson findUser = Filters.eq("email", user.getEmail());
+		    FindOneAndUpdateOptions options = new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER);
+		    try {
+		      User updatedDocument = collection.findOneAndUpdate(findUser, updateFilter, options);
+		      if (updatedDocument == null) {
+		        System.out.println("Couldn't update the recipe. Did someone (or something) delete it?");
+		      } else {
+		        System.out.println("\nUpdated the user to: " + updatedDocument);
+		      }
+		    } catch (MongoException me) {
+		      System.err.println("Unable to update any user profile due to an error: " + me);
+		    }		
+	}
 }

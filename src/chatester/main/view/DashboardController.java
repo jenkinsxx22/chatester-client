@@ -68,7 +68,7 @@ public class DashboardController implements Initializable{
 		mainPane.setCenter(fxml);
 		HomeController controller = (HomeController) loader.getController();
 		controller.setMainApp(this);
-		controller.setUserName("Offline testing..");
+		controller.setUserName(mainApp.getUserName());
 		
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -85,6 +85,7 @@ public class DashboardController implements Initializable{
 		mainPane.setCenter(fxml);
 		ProfileController controller = (ProfileController) loader.getController();
 		controller.setMainApp(this);		
+		controller.setUser(mainApp.getUser());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -127,12 +128,20 @@ public class DashboardController implements Initializable{
 		System.exit(0);
 	}
 	
+	public void uploadUploadProfile(byte[] imgBytes) {
+		mainApp.uploadProfile(imgBytes);
+	}
+	
     public void setMainApp(ChatesterApplicationMain mainApp) {
         this.mainApp = mainApp;
+        mainApp.checkConnection();
     }
     
 	 public void setDialogStage(Stage dialogStage) {
 	        this.dialogStage = dialogStage;
 	    }
 
+	 public void showWaitingDialog(String cmdStr) {
+		 mainApp.showWaitingBar(cmdStr);
+	 }
 }

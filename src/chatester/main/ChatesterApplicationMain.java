@@ -10,6 +10,7 @@ import chatester.main.view.HomeController;
 import chatester.main.view.LoginController;
 import chatester.main.view.RegisterController;
 import chatester.main.view.interneterrorController;
+import chatester.main.view.waitingbarController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -33,17 +34,16 @@ public class ChatesterApplicationMain extends Application {
         this.primaryStage.getIcons().add(new Image("file:resources/images/chat-icon.png"));
         this.primaryStage.initStyle(StageStyle.UNDECORATED);
 
-//        if(checkConnection()==true)
-//        {
-//	        if (getUserName().equals("")) {	        	
-//	        	showLogin();
-//	        }else {
-//	        	if(validateUser()==true) {showHome();}
-//	        	else {showLogin();}
-//	        }
-//        }        
+        if(checkConnection()==true)
+        {
+	        if (getUserName().equals("")) {	        	
+	        	showLogin();
+	        }else {
+	        	if(validateUser()==true) {showHome();}
+	        	else {showLogin();}
+	        }
+        }        
         
-        showHome();
 }
 
    public boolean checkConnection() 
@@ -190,32 +190,35 @@ public class ChatesterApplicationMain extends Application {
 		return this.user;
 	}
 	public void showWaitingBar(String cmdStr) {
-//		Stage waitingStage = new Stage();
-//		waitingbarController controller = new waitingbarController();
-//		waitingStage.setTitle("Chatester App");
-//		waitingStage.getIcons().add(new Image("file:resources/images/chat-icon.png"));
-//		waitingStage.initStyle(StageStyle.UNDECORATED);
-//		if (cmdStr=="Show") {		
-//			try {
-//				FXMLLoader loader =new FXMLLoader(getClass().getResource("view/waitingbar.fxml"));			
-//				Parent fxml = (Parent) loader.load();
-//				waitingStage.setScene(new Scene(fxml, 600, 150));
-//				waitingStage.show();
+		Stage waitingStage = new Stage();
+		waitingbarController controller = new waitingbarController();
+		waitingStage.setTitle("Chatester App");
+		waitingStage.getIcons().add(new Image("file:resources/images/chat-icon.png"));
+		waitingStage.initStyle(StageStyle.UNDECORATED);
+		if (cmdStr=="Show") {		
+			try {
+				FXMLLoader loader =new FXMLLoader(getClass().getResource("view/waitingbar.fxml"));			
+				Parent fxml = (Parent) loader.load();
+				waitingStage.setScene(new Scene(fxml, 600, 150));
+				waitingStage.show();
+				controller = (waitingbarController) loader.getController();
+				controller.setDialogStage(waitingStage);
+				controller.setMainApp(this);
+				controller.runProgressBar();
+
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+		if(cmdStr=="Hide") {
+			waitingStage.close();
+			//				FXMLLoader loader =new FXMLLoader(getClass().getResource("view/waitingbar.fxml"));			
 //				controller = (waitingbarController) loader.getController();
 //				controller.setDialogStage(waitingStage);
 //				controller.setMainApp(this);
-//				controller.runProgressBar();
-//
-//				} catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//		}
-//		if(cmdStr=="Hide") {
-//			waitingStage.close();
-//		//	System.out.println("Hide Works");
-//			//controller.hideDialog();
-//		}
+//				controller.hideDialog();
+		}
 	} 
 	
 	public boolean validateUser() {
@@ -239,7 +242,10 @@ public class ChatesterApplicationMain extends Application {
 	        }
 	return result;	
 	}
-	
+	public void uploadProfile(byte[] imgBytes) {
+		user.setProfilepic(imgBytes);
+		userservice.uploadProfilePic(user);
+	}
 	public void showLoginError() {
         // Show the error message.
         Alert alert = new Alert(AlertType.ERROR);
