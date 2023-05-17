@@ -5,17 +5,16 @@ import java.util.prefs.Preferences;
 
 import chatester.main.models.User;
 import chatester.main.services.UserService;
+import chatester.main.view.DashboardController;
 import chatester.main.view.HomeController;
 import chatester.main.view.LoginController;
 import chatester.main.view.RegisterController;
-import chatester.main.view.waitingbarController;
+import chatester.main.view.interneterrorController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
@@ -27,35 +26,98 @@ public class ChatesterApplicationMain extends Application {
 	
 	private User user = new User();
 	private UserService userservice = new UserService();
-    public void start(Stage primaryStage) {
+	public void start(Stage primaryStage) {
 
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Chatester App");
         this.primaryStage.getIcons().add(new Image("file:resources/images/chat-icon.png"));
         this.primaryStage.initStyle(StageStyle.UNDECORATED);
+
+//        if(checkConnection()==true)
+//        {
+//	        if (getUserName().equals("")) {	        	
+//	        	showLogin();
+//	        }else {
+//	        	if(validateUser()==true) {showHome();}
+//	        	else {showLogin();}
+//	        }
+//        }        
         
-        userservice.Connect();
-        if (getUserName().equals("")) {
-        	showLogin();
-        }else {
-        	if(validateUser()==true) {showHome();}
-        	else {showLogin();}
-        }
+        showHome();
 }
+
+   public boolean checkConnection() 
+    {
+    	boolean checkConn=false;
+    	
+    	
+    		
+    		checkConn=userservice.Connect();
+    		if(checkConn==false) {
+    		  try {
+    		        // Load the fxml file and create a new stage for the popup dialog.
+    		        FXMLLoader loader = new FXMLLoader();
+    		        loader.setLocation(getClass().getResource("view/interneterror.fxml"));
+    		        AnchorPane page = (AnchorPane) loader.load();
+
+    		        // Create the dialog Stage.
+    		        Stage dialogStage = new Stage();
+    		        dialogStage.initStyle(StageStyle.UNDECORATED);
+    		        dialogStage.initOwner(primaryStage);
+    		        dialogStage.getIcons().add(new Image("file:resources/images/chat-icon.png"));
+    		        Scene scene = new Scene(page);
+    		        dialogStage.setScene(scene);
+
+    		        // Set the person into the controller.
+    		        interneterrorController controller = loader.getController();
+    		        controller.setDialogStage(dialogStage);
+    		        controller.setMainApp(this);
+    		        // Show the dialog and wait until the user closes it
+    		        dialogStage.showAndWait();
+
+    		     
+    		        
+    		    } catch (IOException e) {
+    		        e.printStackTrace();
+    		 
+    		    }
+    		 
+    	}
+    		 return checkConn;
+    }
+    
+//	public void showHome() {
+//    	showWaitingBar("Show");
+//
+//		try {
+//		FXMLLoader loader =new FXMLLoader(getClass().getResource("view/Home.fxml"));			
+//		Parent fxml = (Parent) loader.load();
+//        primaryStage.setScene(new Scene(fxml, 1000, 650));
+//        primaryStage.show();
+//    	//	controller.setDialogStage(primaryStage);
+//
+//        HomeController controller = (HomeController) loader.getController();
+//		controller.setMainApp(this);
+//		controller.setUserName(user.getFullName());
+//		
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//	}
 
 	public void showHome() {
     	showWaitingBar("Show");
 
 		try {
-		FXMLLoader loader =new FXMLLoader(getClass().getResource("view/Home.fxml"));			
+		FXMLLoader loader =new FXMLLoader(getClass().getResource("view/Dashboard.fxml"));			
 		Parent fxml = (Parent) loader.load();
         primaryStage.setScene(new Scene(fxml, 1000, 650));
         primaryStage.show();
-    	//	controller.setDialogStage(primaryStage);
-
-        HomeController controller = (HomeController) loader.getController();
+        DashboardController controller = (DashboardController) loader.getController();
 		controller.setMainApp(this);
-		controller.setUserName(user.getFullName());
+		controller.setDialogStage(primaryStage);
 		
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -63,7 +125,6 @@ public class ChatesterApplicationMain extends Application {
 		}
 		
 	}
-
     
 	public void showLogin() {
     	showWaitingBar("Show");

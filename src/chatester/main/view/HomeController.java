@@ -2,22 +2,18 @@ package chatester.main.view;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import chatester.main.ChatesterApplicationMain;
-import chatester.main.services.UserService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.TilePane; 
 public class HomeController implements Initializable{
 	
-	private ChatesterApplicationMain mainApp;
+	private DashboardController mainApp;
 	
 	private String userName;
 	@FXML
@@ -58,19 +54,17 @@ public class HomeController implements Initializable{
 
 
 	
-    public void setMainApp(ChatesterApplicationMain mainApp) {
+    public void setMainApp(DashboardController mainApp) {
         this.mainApp = mainApp;
         
     }
     public void setUserName(String username) {
     	this.userName=username;
     	userLabel.setText("Hi, "+userName);
-    	 mainApp.showWaitingBar("Hide");
     }
 
     public void logOut() {
-    	mainApp.setUserLogin("", "");
-    	mainApp.showLogin();
+
     }
     public void Exit() {
     	System.exit(0);

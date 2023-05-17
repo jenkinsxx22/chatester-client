@@ -18,10 +18,7 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
-import com.mongodb.client.result.InsertManyResult;
 import com.mongodb.client.result.InsertOneResult;
-
-import chatester.main.MainMongoTest.Recipe;
 import chatester.main.models.User;
 
 public class UserService {
@@ -32,7 +29,10 @@ public class UserService {
 	private MongoClientSettings settings;
 	private  MongoClient mongoClient = null;
 	
-	public void Connect() {
+	public boolean Connect() {
+		boolean chk=false;
+		
+		try {
 		Logger.getLogger( "org.mongodb.driver" ).setLevel(Level.WARNING);
 	    ConnectionString mongoUri = new ConnectionString(mongConnection);
 	    CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
@@ -44,10 +44,18 @@ public class UserService {
 	   
 	    try {
 	       mongoClient = MongoClients.create(settings);
+	       chk=true;
 	    } catch (MongoException me) {
 	      System.err.println("Unable to connect to the MongoDB instance due to an error: " + me);
-	      System.exit(1);
+	      chk=false;
+//	      System.exit(1);
 	    }
+	    
+		}
+	    catch(Exception e) {
+	    	chk=false;
+	    }
+	    return chk;
 	}
 	public void SaveUser(User user) {
 		MongoDatabase database = mongoClient.getDatabase(dbName);

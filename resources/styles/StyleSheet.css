@@ -17,7 +17,20 @@
 	-fx-background-color: #8888ff;
 	-fx-background-radius: 0px;
 	-fx-border-color: #0000ff;
-	-fx-border-width: 4px 0px 0px 0px;
+	-fx-border-width: 0px 0px 0px 0px;
+	-fx-border-style: solid;
+}
+.dashboardbuttons{
+	-fx-background-color: transparent;
+	-fx-background-radius: 0px;
+		-fx-font-size: 12pt;
+	-fx-font-family: "Segoe UI Semibold"
+}
+.dashboardbuttons:hover{
+	-fx-background-color: #f8eff2;
+	-fx-background-radius: 0px;
+	-fx-border-color: #0000ff;
+	-fx-border-width: 0px 4px 0px 0px;
 	-fx-border-style: solid;
 }
 
